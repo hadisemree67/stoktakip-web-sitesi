@@ -9,6 +9,7 @@ Projeyi başka bir bilgisayara (örneğin Mac) kurmak için aşağıdaki adımla
 ### 1. Gereksinimler
 Bilgisayarınızda **Node.js** yüklü olmalıdır.
 - **Mac için**: [nodejs.org](https://nodejs.org/) adresinden "LTS" sürümünü indirip kurun.
+- **VS Code** (Kod Editörü): [code.visualstudio.com](https://code.visualstudio.com/download) adresinden indirebilirsiniz.
 
 ### 2. Projeyi İndirme (Clone)
 Terminali açın ve projeyi indirmek istediğiniz klasöre gidip şu komutu yazın:
