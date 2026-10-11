@@ -29,9 +29,15 @@ const SalesLocations = () => {
 
     const handleSave = async (e) => {
         e.preventDefault();
+        const payload = {
+            name: formData.name.trim(),
+            type: formData.type,
+            address: formData.address?.trim() || null
+        };
+
         const { error } = editingId
-            ? await supabase.from('sales_locations').update(formData).eq('id', editingId)
-            : await supabase.from('sales_locations').insert([formData]);
+            ? await supabase.from('sales_locations').update(payload).eq('id', editingId)
+            : await supabase.from('sales_locations').insert([payload]);
 
         if (error) {
             toast.error(error.message);
@@ -136,11 +142,12 @@ const SalesLocations = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Adres</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Adres <span className="text-xs text-slate-400 font-normal">(Opsiyonel)</span></label>
                         <textarea
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
                             value={formData.address}
                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                            placeholder="Adres bilgisi (İsteğe bağlı)"
                         ></textarea>
                     </div>
                     <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors">

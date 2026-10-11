@@ -55,12 +55,29 @@ const StockMovements = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const qty = Number(formData.quantity);
+        if (qty <= 0) {
+            return toast.error('Miktar 1 veya daha fazla olmalıdır');
+        }
 
-        // Call the database function to handle logic safely
-        // We assume a 'handle_stock_movement' RPC exists
+        // Çıkış veya Transfer işlemlerinde stok kontrolü (stok eksiye düşmesin)
+        if (formData.type === 'out' || formData.type === 'transfer') {
+            const { data: stockData } = await supabase
+                .from('stock_levels')
+                .select('quantity')
+                .eq('product_id', formData.product_id)
+                .eq('warehouse_id', formData.from_warehouse_id)
+                .maybeSingle();
+
+            const currentStock = stockData?.quantity || 0;
+            if (currentStock < qty) {
+                return toast.error(`Yetersiz stok! Bu depodaki mevcut stok: ${currentStock}, Çıkış yapılmak istenen: ${qty}`);
+            }
+        }
+
         const payload = {
             p_product_id: formData.product_id,
-            p_quantity: Number(formData.quantity),
+            p_quantity: qty,
             p_type: formData.type,
             p_from_warehouse_id: formData.type === 'in' ? null : formData.from_warehouse_id,
             p_to_warehouse_id: formData.type === 'out' ? null : formData.to_warehouse_id,

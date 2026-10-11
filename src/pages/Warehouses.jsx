@@ -29,9 +29,15 @@ const Warehouses = () => {
 
     const handleSave = async (e) => {
         e.preventDefault();
+        const payload = {
+            name: formData.name.trim(),
+            location: formData.location?.trim() || null,
+            description: formData.description?.trim() || null
+        };
+
         const { error } = editingId
-            ? await supabase.from('warehouses').update(formData).eq('id', editingId)
-            : await supabase.from('warehouses').insert([formData]);
+            ? await supabase.from('warehouses').update(payload).eq('id', editingId)
+            : await supabase.from('warehouses').insert([payload]);
 
         if (error) {
             toast.error(error.message);
@@ -120,13 +126,13 @@ const Warehouses = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Konum</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Konum <span className="text-xs text-slate-400 font-normal">(Opsiyonel)</span></label>
                         <input
                             type="text"
-                            required
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={formData.location}
                             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                            placeholder="Örn: Kadıköy / İstanbul"
                         />
                     </div>
                     <div>

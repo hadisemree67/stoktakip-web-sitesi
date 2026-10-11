@@ -36,9 +36,17 @@ const Customers = () => {
 
     const handleSave = async (e) => {
         e.preventDefault();
+        const payload = {
+            name: formData.name.trim(),
+            type: formData.type,
+            email: formData.email?.trim() || null,
+            phone: formData.phone?.trim() || null,
+            address: formData.address?.trim() || null
+        };
+
         const { error } = editingId
-            ? await supabase.from('customers').update(formData).eq('id', editingId)
-            : await supabase.from('customers').insert([formData]);
+            ? await supabase.from('customers').update(payload).eq('id', editingId)
+            : await supabase.from('customers').insert([payload]);
 
         if (error) {
             toast.error(error.message);

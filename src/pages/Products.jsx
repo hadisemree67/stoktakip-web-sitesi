@@ -41,9 +41,20 @@ const Products = () => {
 
     const handleSave = async (e) => {
         e.preventDefault();
+        const payload = {
+            name: formData.name.trim(),
+            sku_or_barcode: formData.sku_or_barcode?.trim() || null,
+            category: formData.category?.trim() || null,
+            brand: formData.brand?.trim() || null,
+            currency: formData.currency || 'TL',
+            purchase_price: formData.purchase_price === '' || formData.purchase_price === null ? 0 : Number(formData.purchase_price),
+            unit_price: formData.unit_price === '' || formData.unit_price === null ? 0 : Number(formData.unit_price),
+            wholesale_price: formData.wholesale_price === '' || formData.wholesale_price === null ? 0 : Number(formData.wholesale_price),
+        };
+
         const { error } = editingId
-            ? await supabase.from('products').update(formData).eq('id', editingId)
-            : await supabase.from('products').insert([formData]);
+            ? await supabase.from('products').update(payload).eq('id', editingId)
+            : await supabase.from('products').insert([payload]);
 
         if (error) {
             toast.error(error.message);
@@ -139,7 +150,16 @@ const Products = () => {
                             ) : (
                                 filteredProducts.map((product) => (
                                     <tr key={product.id} className="hover:bg-slate-50 transition-colors">
-                                        <td className="px-6 py-4 font-medium text-slate-900">{product.name}</td>
+                                        <td className="px-6 py-4 font-medium text-slate-900">
+                                            <div className="flex items-center gap-2">
+                                                <span>{product.name}</span>
+                                                {product.currency && product.currency !== 'TL' && (
+                                                    <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${product.currency === 'USD' ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800'}`}>
+                                                        {product.currency === 'USD' ? 'USD ($)' : 'EUR (€)'}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
                                         <td className="px-6 py-4 flex items-center gap-2">
                                             <Barcode size={16} className="text-slate-400" /> {product.sku_or_barcode}
                                         </td>
@@ -193,32 +213,34 @@ const Products = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Barkod / SKU</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Barkod / SKU <span className="text-xs text-slate-400 font-normal">(Opsiyonel)</span></label>
                         <input
                             type="text"
-                            required
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={formData.sku_or_barcode}
                             onChange={(e) => setFormData({ ...formData, sku_or_barcode: e.target.value })}
+                            placeholder="Örn: 8690000000000"
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Kategori</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Kategori <span className="text-xs text-slate-400 font-normal">(Opsiyonel)</span></label>
                             <input
                                 type="text"
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={formData.category}
                                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                placeholder="Örn: Elektronik"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Marka</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Marka <span className="text-xs text-slate-400 font-normal">(Opsiyonel)</span></label>
                             <input
                                 type="text"
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={formData.brand}
                                 onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                                placeholder="Örn: Apple"
                             />
                         </div>
                     </div>
@@ -237,7 +259,7 @@ const Products = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Alış Fiyatı</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Alış Fiyatı <span className="text-xs text-slate-400 font-normal">(Opsiyonel)</span></label>
                         <div className="relative">
                             <input
                                 type="number"
@@ -246,30 +268,29 @@ const Products = () => {
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={formData.purchase_price}
                                 onChange={(e) => setFormData({ ...formData, purchase_price: e.target.value })}
-                                placeholder="Alış Fiyatı"
+                                placeholder="0"
                             />
                             <span className="absolute right-3 top-2 text-slate-500 text-sm font-semibold">{formData.currency}</span>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Perakende Satış</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Perakende Satış <span className="text-xs text-slate-400 font-normal">(Opsiyonel)</span></label>
                             <div className="relative">
                                 <input
                                     type="number"
-                                    required
                                     min="0"
                                     step="0.01"
                                     className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     value={formData.unit_price}
                                     onChange={(e) => setFormData({ ...formData, unit_price: e.target.value })}
-                                    placeholder="Perakende"
+                                    placeholder="0"
                                 />
                                 <span className="absolute right-3 top-2 text-slate-500 text-sm font-semibold">{formData.currency}</span>
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Toptan Satış</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Toptan Satış <span className="text-xs text-slate-400 font-normal">(Opsiyonel)</span></label>
                             <div className="relative">
                                 <input
                                     type="number"
@@ -278,7 +299,7 @@ const Products = () => {
                                     className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     value={formData.wholesale_price}
                                     onChange={(e) => setFormData({ ...formData, wholesale_price: e.target.value })}
-                                    placeholder="Toptan"
+                                    placeholder="0"
                                 />
                                 <span className="absolute right-3 top-2 text-slate-500 text-sm font-semibold">{formData.currency}</span>
                             </div>
