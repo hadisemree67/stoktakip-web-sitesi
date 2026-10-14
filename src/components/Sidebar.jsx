@@ -9,7 +9,8 @@ import {
     ArrowRightLeft,
     ShoppingCart,
     TrendingUp,
-    X
+    X,
+    BookOpen
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -19,6 +20,7 @@ const Sidebar = ({ mobileOpen, onCloseMobile }) => {
     const menuItems = [
         { icon: LayoutDashboard, label: 'Panel', path: '/dashboard' },
         { icon: ShoppingCart, label: 'Satışlar', path: '/sales' },
+        { icon: BookOpen, label: 'Veresiye Defteri', path: '/veresiye' },
         { icon: Package, label: 'Ürünler', path: '/products' },
         { icon: Users, label: 'Müşteriler', path: '/customers' },
         { icon: BarChart3, label: 'Stok Durumu', path: '/stock' },

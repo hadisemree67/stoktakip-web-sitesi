@@ -362,9 +362,9 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* 5. Alacak (Veresiye) Hasılatı - TIKLANABİLİR KART */}
-                <div
-                    onClick={() => setIsReceivablesModalOpen(true)}
+                {/* 5. Alacak (Veresiye) Hasılatı - TIKLANABİLİR KART (Veresiye Defterine Bağlı) */}
+                <Link
+                    to="/veresiye"
                     className="bg-amber-500 text-white p-4 rounded-xl shadow-md hover:bg-amber-600 transition-all cursor-pointer flex flex-col justify-between group relative overflow-hidden"
                 >
                     <div className="flex items-center justify-between mb-2">
@@ -376,11 +376,11 @@ const Dashboard = () => {
                     <div>
                         <h3 className="text-xl font-extrabold">{formatCurrency(revenues.receivable)}</h3>
                         <div className="flex items-center justify-between text-xs text-amber-100 font-semibold mt-1">
-                            <span>Bekleyen Alacaklar</span>
+                            <span>Veresiye Defteri</span>
                             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </div>
                     </div>
-                </div>
+                </Link>
             </div>
 
             {/* İkincil Sayılar (Müşteri, Ürün, Stok) */}

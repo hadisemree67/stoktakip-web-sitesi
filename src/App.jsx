@@ -16,6 +16,7 @@ import SalesNew from './pages/SalesNew';
 import SaleDetail from './pages/SaleDetail';
 import SalesReports from './pages/SalesReports';
 import Onboarding from './pages/Onboarding';
+import VeresiyeDefteri from './pages/VeresiyeDefteri';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route path="/sales" element={<Sales />} />
             <Route path="/sales/new" element={<SalesNew />} />
             <Route path="/sales/:id" element={<SaleDetail />} />
+            <Route path="/veresiye" element={<VeresiyeDefteri />} />
             <Route path="/reports" element={<SalesReports />} />
           </Route>
         </Route>

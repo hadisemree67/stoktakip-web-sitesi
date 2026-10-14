@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, ShoppingCart, Package, Users, Menu } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, BookOpen, Package, Users, Menu } from 'lucide-react';
 import clsx from 'clsx';
 
 const MobileBottomNav = ({ onOpenMore }) => {
@@ -8,8 +8,8 @@ const MobileBottomNav = ({ onOpenMore }) => {
     const navItems = [
         { icon: LayoutDashboard, label: 'Panel', path: '/dashboard' },
         { icon: ShoppingCart, label: 'Satış Yap', path: '/sales/new' },
+        { icon: BookOpen, label: 'Veresiye', path: '/veresiye' },
         { icon: Package, label: 'Ürünler', path: '/products' },
-        { icon: Users, label: 'Müşteriler', path: '/customers' },
     ];
 
     return (

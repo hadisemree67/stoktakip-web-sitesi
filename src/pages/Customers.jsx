@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Plus, Search, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, BookOpen } from 'lucide-react';
 import Modal from '../components/Modal';
 import toast from 'react-hot-toast';
 
@@ -152,6 +153,13 @@ const Customers = () => {
                                         <td className="px-6 py-4 truncate max-w-xs">{customer.address}</td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
+                                                <Link
+                                                    to={`/veresiye?customerId=${customer.id}`}
+                                                    title="Veresiye Defteri & Borç Durumu"
+                                                    className="p-2 hover:bg-amber-100 rounded-lg text-amber-600 transition-colors"
+                                                >
+                                                    <BookOpen size={18} />
+                                                </Link>
                                                 <button onClick={() => openEdit(customer)} className="p-2 hover:bg-slate-200 rounded-lg text-blue-600 transition-colors">
                                                     <Edit2 size={18} />
                                                 </button>
