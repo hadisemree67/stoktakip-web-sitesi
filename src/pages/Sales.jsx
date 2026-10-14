@@ -20,7 +20,10 @@ const Sales = () => {
             .from('sales')
             .select(`
                 id,
+                customer_id,
                 total_amount,
+                paid_amount,
+                remaining_amount,
                 payment_method,
                 payment_status,
                 paid_at,
@@ -38,6 +41,7 @@ const Sales = () => {
                 .from('sales')
                 .select(`
                     id,
+                    customer_id,
                     total_amount,
                     created_at,
                     customers (name, phone),
@@ -61,17 +65,35 @@ const Sales = () => {
     // Alacağı Tahsil Et
     const handleCollectPayment = async (saleId) => {
         try {
+            const currentSale = sales.find(s => s.id === saleId);
+            const total = Number(currentSale?.total_amount) || 0;
+
             const { error } = await supabase
                 .from('sales')
                 .update({
                     payment_status: 'paid',
-                    paid_at: new Date().toISOString()
+                    paid_at: new Date().toISOString(),
+                    paid_amount: total,
+                    remaining_amount: 0
                 })
                 .eq('id', saleId);
 
             if (error) {
                 toast.error('Tahsilat kaydedilemedi: ' + error.message);
             } else {
+                if (currentSale?.customer_id) {
+                    try {
+                        await supabase.from('customer_payments').insert([{
+                            customer_id: currentSale.customer_id,
+                            sale_id: saleId,
+                            amount: total,
+                            payment_method: 'nakit',
+                            note: 'Satış fişi üzerinden tahsil edildi'
+                        }]);
+                    } catch (e) {
+                        console.log('Customer payment log note:', e);
+                    }
+                }
                 toast.success('Alacak başarıyla tahsil edildi olarak işaretlendi!');
                 fetchSales();
             }

@@ -364,13 +364,15 @@ const SalesNew = () => {
         } else {
             const saleId = saleRes.data?.id;
 
-            // Tablo kolonları mevcutsa doğrudan güncelle
+            const grandTotal = calculateTotal();
             if (saleId) {
                 try {
                     await supabase.from('sales').update({
                         payment_method: paymentMethod,
                         payment_status: paymentStatus,
-                        paid_at: paymentStatus === 'paid' ? new Date().toISOString() : null
+                        paid_at: paymentStatus === 'paid' ? new Date().toISOString() : null,
+                        paid_amount: paymentStatus === 'paid' ? grandTotal : 0,
+                        remaining_amount: paymentStatus === 'paid' ? 0 : grandTotal
                     }).eq('id', saleId);
                 } catch (e) {
                     console.log('Payment method update note:', e);
