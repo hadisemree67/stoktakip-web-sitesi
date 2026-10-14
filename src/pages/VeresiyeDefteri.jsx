@@ -558,7 +558,7 @@ const VeresiyeDefteri = () => {
                                                 <p className="text-xs text-slate-400 mt-0.5">
                                                     {c.phone ? `📞 ${c.phone}` : 'Telefon yok'}
                                                     {stats?.unpaidSalesCount > 0 && (
-                                                        <span className="ml-2 text-amber-700 font-semibold">• {stats.unpaidSalesCount} Açık Fiş</span>
+                                                        <span className="ml-2 text-amber-700 font-semibold">• {stats.unpaidSalesCount} Açık Borç Kaydı</span>
                                                     )}
                                                 </p>
                                             </div>
@@ -658,7 +658,7 @@ const VeresiyeDefteri = () => {
                                             : 'border-transparent text-slate-500 hover:text-slate-800'
                                     }`}
                                 >
-                                    Veresiye Alışveriş Fişleri ({selectedCustStats?.salesList.length || 0})
+                                    Veresiye Alışverişleri ({selectedCustStats?.salesList.length || 0})
                                 </button>
                                 <button
                                     type="button"
